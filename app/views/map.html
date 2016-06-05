@@ -1,6 +1,5 @@
 <div class="row">
-  <div class="col-lg-4">
-    <h2>Indicatori di qualità</h2>
+  <div class="col-lg-6">
     <h4>Verde nel tuo quartiere</h4>
     <rzslider
       rz-slider-model="ambiente.value"
@@ -24,16 +23,31 @@
       <img src="/images/ajax-loader.gif" alt="">
     </div>
 
-    <div class="row" ng-if="!loading">
-      <div class="col-md-8">
-        {{currentName}}
-      </div>
-      <h3 class="col-md-4">
-        {{currentScore | number:2}}<span ng-if="currentScore">%</span>
-      </h3>
-    </div>
+    <table class="table table-condensed" ng-if="!loading">
+      <thead>
+      <tr>
+        <th>Municipio</th>
+        <th>Punteggio</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="(key, value) in names" ng-class="{success:isTheWinner(key)}">
+        <td>{{value}}</td>
+        <td>{{getScore(key) | number:2}}%</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <!--<div class="row" ng-if="!loading">-->
+      <!--<div class="col-md-8">-->
+        <!--{{currentName}}-->
+      <!--</div>-->
+      <!--<h3 class="col-md-4">-->
+        <!--{{currentScore | number:2}}<span ng-if="currentScore">%</span>-->
+      <!--</h3>-->
+    <!--</div>-->
   </div>
-  <div class="col-lg-8">
+  <div class="col-lg-6">
     <ui-gmap-google-map center='map.center' zoom='map.zoom'>
       <ui-gmap-polygon static="true" ng-repeat="p in polygonsMun3 track by $index"  path="p.path" stroke="p.stroke" visible="p.visible"
                        geodesic="p.geodesic" fill="p.fill" fit="false" clickable="true" editable="p.editable" draggable="p.draggable" >

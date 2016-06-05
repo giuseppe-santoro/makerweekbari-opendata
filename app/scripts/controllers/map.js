@@ -25,16 +25,19 @@ angular.module('makerWeekApp')
         $scope.cultura.value,
         $scope.salute.value
       ).then(function(results){
-        console.log(results);
         $scope.scores = results;
         $scope.currentScore = $scope.scores[1].scorePercentage;
-        $scope.currentName = names[1];
+        $scope.currentName = $scope.names[1];
       }).catch(function(err){
         console.error(err);
       }).finally(function(){
         $scope.loading = false;
       });
     }
+
+    $scope.getScore = function(id) {
+      return $scope.scores[id].scorePercentage;
+    };
 
     $scope.ambiente = {
       value:1,
@@ -70,17 +73,24 @@ angular.module('makerWeekApp')
     };
 
     $scope.currentScore = undefined;
-    $scope.scores = {};
+    $scope.scores = [];
     $scope.currentName = '';
 
-    var names = {
-      1: 'PICONE-POGGIOFRANCO-CARRASSI-SAN PASQUALE-MUNGIVACCA',
-      3: 'PALESE-S.SPIRITO-CATINO-SAN PIO',
-      4: 'SAN PAOLO-STANIC-VILLAGGIO DEL LAVORATORE-SAN GIROLAMO-FESCA-MARCONI',
-      5: 'CARBONARA-CEGLIE-LOSETO'
+    $scope.names = {
+      1: 'Picone-Poggiofranco-Carrassi-San Pasquale-Mungivacca',
+      3: 'Palese-S.Spirito-Catino-San Pio',
+      4: 'San Paolo-Stanic-Villaggio del Lavoratore-San Girolamo-Fesca-Marconi',
+      5: 'Carbonara-Ceglie-Loseto'
     };
 
-    $scope.map = {center: {latitude: 41.16, longitude: 16.8}, zoom: 12};
+    $scope.isTheWinner = function (key) {
+      var scores = _.values($scope.scores);
+      var max = _.maxBy(scores, 'scorePercentage').scorePercentage;
+
+      return (max === $scope.scores[key].scorePercentage);
+    };
+
+    $scope.map = {center: {latitude: 41.16, longitude: 16.8}, zoom: 11};
     poiApi.getMunicipi().success(function (res) {
       $scope.polygons = _(res.results)
         .filter(function(municipio){
@@ -107,7 +117,7 @@ angular.module('makerWeekApp')
       $scope.polygons[0].events = {
         'mouseover': function () {
           $scope.currentScore = $scope.scores[1].scorePercentage;
-          $scope.currentName = names[1];
+          $scope.currentName = $scope.names[1];
         }
       };
       $scope.polygons[0].fill={
@@ -120,7 +130,7 @@ angular.module('makerWeekApp')
       $scope.polygons[1].events = {
         'mouseover': function () {
           $scope.currentScore = $scope.scores[5].scorePercentage;
-          $scope.currentName = names[5];
+          $scope.currentName = $scope.names[5];
         }
       };
       $scope.polygons[1].fill={
@@ -132,17 +142,11 @@ angular.module('makerWeekApp')
       $scope.polygons[2].events = {
         'mouseover': function () {
           $scope.currentScore = $scope.scores[3].scorePercentage;
-          $scope.currentName = names[3];
+          $scope.currentName = $scope.names[3];
         }
       };
       $scope.polygons[2].fill={
         municipio: 3,
-        events: {
-          'mouseover': function () {
-            console.log($scope.scores[3].scorePercentage);
-            //$scope.currentScore = $scope.score
-          }
-        },
         color: '#00ffff', //azzurro
         opacity: 0.8
       };
@@ -150,17 +154,11 @@ angular.module('makerWeekApp')
       $scope.polygons[3].events = {
         'mouseover': function () {
           $scope.currentScore = $scope.scores[4].scorePercentage;
-          $scope.currentName = names[4];
+          $scope.currentName = $scope.names[4];
         }
       };
       $scope.polygons[3].fill={
         municipio: 4,
-        events: {
-          'mouseover': function () {
-            console.log($scope.scores[4].scorePercentage);
-            //$scope.currentScore = $scope.score
-          }
-        },
         color: '#ffff00', //giallo
         opacity: 0.8
       };
