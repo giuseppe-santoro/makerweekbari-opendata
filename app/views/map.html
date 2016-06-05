@@ -1,0 +1,48 @@
+<div class="row">
+  <div class="col-lg-4">
+    <h2>Indicatori di qualità</h2>
+    <h4>Verde nel tuo quartiere</h4>
+    <rzslider
+      rz-slider-model="ambiente.value"
+      rz-slider-options="ambiente.options"></rzslider>
+    <h4>Cultura nel tuo quartiere</h4>
+    <rzslider
+      rz-slider-model="cultura.value"
+      rz-slider-options="cultura.options"></rzslider>
+    <h4>Salute nel tuo quartiere</h4>
+    <rzslider
+      rz-slider-model="salute.value"
+      rz-slider-options="salute.options"></rzslider>
+    <h4>Servizi al cittadino nel tuo quartiere</h4>
+    <rzslider
+      rz-slider-model="servizi.value"
+      rz-slider-options="servizi.options"></rzslider>
+
+    <p></p>
+
+    <div style="text-align: center" ng-if="loading">
+      <img src="/images/ajax-loader.gif" alt="">
+    </div>
+
+    <div class="row" ng-if="!loading">
+      <div class="col-md-8">
+        {{currentName}}
+      </div>
+      <h3 class="col-md-4">
+        {{currentScore | number:2}}<span ng-if="currentScore">%</span>
+      </h3>
+    </div>
+  </div>
+  <div class="col-lg-8">
+    <ui-gmap-google-map center='map.center' zoom='map.zoom'>
+      <ui-gmap-polygon static="true" ng-repeat="p in polygonsMun3 track by $index"  path="p.path" stroke="p.stroke" visible="p.visible"
+                       geodesic="p.geodesic" fill="p.fill" fit="false" clickable="true" editable="p.editable" draggable="p.draggable" >
+      </ui-gmap-polygon>
+      <ui-gmap-polygon static="true" ng-repeat="p in polygons track by p.id"  path="p.path" stroke="p.stroke" visible="p.visible"
+                       geodesic="p.geodesic" fill="p.fill" fit="false" events="p.events" clickable="true" editable="p.editable" draggable="p.draggable" >
+      </ui-gmap-polygon>
+
+
+    </ui-gmap-google-map>
+  </div>
+</div>
